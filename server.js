@@ -26,6 +26,31 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tasks', require('./routes/tasks'));
 
+// Add this after your middleware setup
+app.get('/api/test-db', async (req, res) => {
+    try {
+        // Test MongoDB connection
+        const dbState = mongoose.connection.readyState;
+        const status = {
+            0: "disconnected",
+            1: "connected",
+            2: "connecting",
+            3: "disconnecting"
+        };
+        
+        res.json({ 
+            status: status[dbState],
+            database: mongoose.connection.name,
+            host: mongoose.connection.host
+        });
+    } catch (err) {
+        res.status(500).json({ 
+            error: err.message,
+            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        });
+    }
+});
+
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

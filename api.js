@@ -1,5 +1,5 @@
 const API_URL = process.env.NODE_ENV === 'production' 
-    ? 'https://to-due.onrender.com'
+    ? 'https://to-due-backend.onrender.com/api'
     : 'http://localhost:5001/api';
 
 const api = {
