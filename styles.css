@@ -1,0 +1,127 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    transition: opacity 0.5s ease;
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+@font-face {
+    font-family: 'YourFont';
+    src: url('../fonts/YourFont-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YourFont';
+    src: url('../fonts/YourFont-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YourFont';
+    src: url('../fonts/YourFont-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YourFont';
+    src: url('../fonts/YourFont-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Remove all datepicker and pikaday styling */
+.datepicker-picker,
+.custom-pikaday,
+.pika-single,
+[datepicker],
+.datepicker-cell,
+.datepicker-header,
+.datepicker-footer {
+    /* Remove all these styles */
+}
+
+.pika-button:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    border-radius: 0.5rem;
+}
+
+.is-selected .pika-button {
+    background: rgb(239, 68, 68) !important;
+    border-radius: 0.5rem;
+}
+
+.is-today .pika-button {
+    color: rgb(239, 68, 68);
+}
+
+/* Style the date picker */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: #4B5563;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+} 
