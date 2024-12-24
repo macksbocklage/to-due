@@ -89,7 +89,8 @@ function getPriorityColor(priority) {
 }
 
 function formatDate(dateString) {
-    return new Date(dateString).toLocaleString();
+    const date = new Date(dateString);
+    return date.toLocaleDateString(); // This will show only the date in the local format
 }
 
 function renderTasks() {
