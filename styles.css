@@ -138,3 +138,60 @@ input[type="date"]::-webkit-datetime-edit-fields-wrapper {
         opacity: 0.9;
     }
 } 
+
+/* Mobile date input fixes */
+.mobile-date-input {
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+/* Safari on iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .mobile-date-input {
+        font-size: 16px;
+        height: 48px;
+        line-height: 48px;
+        padding: 0 8px 0 40px !important;
+        color: #4B5563;
+    }
+    
+    .mobile-date-input::-webkit-datetime-edit-fields-wrapper {
+        height: 48px;
+        line-height: 48px;
+    }
+    
+    .mobile-date-input::-webkit-datetime-edit {
+        height: 48px;
+        line-height: 48px;
+        padding: 0;
+    }
+    
+    .mobile-date-input::-webkit-datetime-edit-text {
+        padding: 0 4px;
+        line-height: 48px;
+    }
+    
+    .mobile-date-input::-webkit-datetime-edit-month-field,
+    .mobile-date-input::-webkit-datetime-edit-day-field,
+    .mobile-date-input::-webkit-datetime-edit-year-field {
+        line-height: 48px;
+    }
+    
+    .mobile-date-input::-webkit-calendar-picker-indicator {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        color: transparent;
+        cursor: pointer;
+    }
+}
+
+.dark .mobile-date-input {
+    color: #E5E7EB;
+} 
