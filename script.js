@@ -113,32 +113,32 @@ function renderTasks() {
 
     todoList.innerHTML = filteredTasks.map(task => `
         <li data-task-id="${task.id}" 
-            class="bg-white dark:bg-zinc-800 rounded-xl p-4 transition-all duration-300 ease-in-out transform">
+            class="bg-white dark:bg-zinc-800 rounded-xl p-3 sm:p-4 transition-all duration-300 ease-in-out transform">
             <div class="flex flex-col gap-2">
-                <div class="flex flex-col sm:flex-row justify-between items-start gap-2">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                     <div class="w-full sm:w-auto">
-                        <h3 class="font-semibold dark:text-gray-100 ${task.status === 'completed' ? 'line-through' : ''}">${task.title.toLowerCase()}</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">${task.description.toLowerCase()}</p>
+                        <h3 class="font-semibold dark:text-gray-100 text-sm sm:text-base ${task.status === 'completed' ? 'line-through' : ''}">${task.title.toLowerCase()}</h3>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">${task.description.toLowerCase()}</p>
                     </div>
                     <div class="flex gap-2 w-full sm:w-auto justify-end">
                         <button onclick="toggleTaskStatus(${task.id})" 
-                            class="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-lg transition-colors duration-200">
+                            class="bg-green-500 hover:bg-green-600 text-white w-7 h-7 sm:w-8 sm:h-8 rounded-lg transition-colors duration-200 text-sm sm:text-base flex items-center justify-center">
                             ✓
                         </button>
                         <button onclick="deleteTask(${task.id})" 
-                            class="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-lg transition-colors duration-200">
+                            class="bg-red-500 hover:bg-red-600 text-white w-7 h-7 sm:w-8 sm:h-8 rounded-lg transition-colors duration-200 text-sm sm:text-base flex items-center justify-center">
                             ×
                         </button>
                     </div>
                 </div>
-                <div class="flex flex-wrap gap-2 text-sm">
-                    <span class="${getPriorityColor(task.priority)} dark:bg-opacity-20 px-2 py-1 rounded-md">
+                <div class="flex flex-wrap gap-1.5 sm:gap-2 text-xs sm:text-sm">
+                    <span class="${getPriorityColor(task.priority)} dark:bg-opacity-20 px-2 py-0.5 sm:py-1 rounded-md">
                         ${task.priority.toLowerCase()}
                     </span>
-                    <span class="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-md">
+                    <span class="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-2 py-0.5 sm:py-1 rounded-md">
                         due: ${formatDate(task.dueDate).toLowerCase()}
                     </span>
-                    <span class="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-md">
+                    <span class="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-2 py-0.5 sm:py-1 rounded-md">
                         fee: $${task.fee.toFixed(2)}
                     </span>
                 </div>
@@ -192,4 +192,38 @@ function initDarkMode() {
 }
 
 // Call after DOM is loaded
-initDarkMode(); 
+initDarkMode();
+
+// Add touch event handling for better mobile interaction
+function addTouchSupport() {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.getElementById('todoList').addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, false);
+    
+    document.getElementById('todoList').addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe(e.target.closest('li'));
+    }, false);
+    
+    function handleSwipe(taskElement) {
+        const swipeLength = touchEndX - touchStartX;
+        if (!taskElement) return;
+        
+        // Left swipe (delete)
+        if (swipeLength < -100) {
+            const taskId = taskElement.dataset.taskId;
+            deleteTask(parseInt(taskId));
+        }
+        // Right swipe (complete)
+        else if (swipeLength > 100) {
+            const taskId = taskElement.dataset.taskId;
+            toggleTaskStatus(parseInt(taskId));
+        }
+    }
+}
+
+// Initialize touch support
+addTouchSupport(); 

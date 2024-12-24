@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Todo List with Fees</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,8 +25,8 @@
     </script>
 </head>
 <body class="bg-gray-100 dark:bg-dark-bg min-h-screen py-12 transition-colors duration-200">
-    <div class="container max-w-3xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col sm:flex-row justify-between items-center mb-8 space-y-4 sm:space-y-0">
+    <div class="container max-w-3xl mx-auto px-3 sm:px-6">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-8 space-y-3 sm:space-y-0">
             <div class="h-12 w-auto relative">
                 <img src="./logo-t-light.png" alt="Task Manager Logo" class="h-full w-auto object-contain dark:hidden">
                 <img src="./logo-t-dark.png" alt="Task Manager Logo" class="h-full w-auto object-contain hidden dark:block">
@@ -48,9 +48,9 @@
                 </button>
             </div>
         </div>
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-4 sm:p-6"">
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-3 sm:p-6">
             <!-- Task Input Form -->
-            <form id="taskForm" class="space-y-4 sm:space-y-6 mb-8">
+            <form id="taskForm" class="space-y-3 sm:space-y-6 mb-6 sm:mb-8">
                 <!-- Title input -->
                 <div>
                     <input type="text" id="taskTitle" 
@@ -66,7 +66,7 @@
                 </div>
 
                 <!-- Date, Fee, Priority in one row -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     <div class="relative">
                         <label for="taskDueDate" class="absolute inset-y-0 start-0 flex items-center ps-3.5 cursor-pointer">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -85,7 +85,7 @@
                             placeholder="fee amount" min="0" step="0.01" required>
                     </div>
 
-                    <div>
+                    <div class="sm:col-span-2 lg:col-span-1">
                         <select id="taskPriority" 
                             class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all bg-white dark:bg-zinc-800 dark:text-gray-200">
                             <option value="">select priority</option>

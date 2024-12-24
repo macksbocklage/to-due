@@ -124,4 +124,17 @@ input[type="date"]::-webkit-datetime-edit {
 
 input[type="date"]::-webkit-datetime-edit-fields-wrapper {
     padding: 0;
+}
+
+@media (max-width: 640px) {
+    /* Prevent text selection during swipes */
+    .task-item {
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    
+    /* Add visual feedback for touch */
+    .task-item:active {
+        opacity: 0.9;
+    }
 } 
