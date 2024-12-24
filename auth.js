@@ -9,57 +9,47 @@ function checkAuth() {
     }
 }
 
-async function handleLogin(e) {
-    e.preventDefault();
-    
-    try {
+// Login handler
+if (document.getElementById('loginForm')) {
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        
-        console.log('Attempting login with:', { email }); // Log login attempt
 
-        const response = await api.login(email, password);
-        console.log('Login response:', response); // Log server response
+        const user = users.find(u => u.email === email && u.password === password);
         
-        if (response.token) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('currentUser', JSON.stringify(response.user));
+        if (user) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
             window.location.href = 'index.html';
         } else {
-            alert(response.message || 'Login failed');
+            alert('Invalid email or password');
         }
-    } catch (err) {
-        console.error('Login error:', err); // Log any errors
-        alert('Login failed. Please try again.');
-    }
+    });
 }
 
-async function handleRegister(e) {
-    e.preventDefault();
-    
-    try {
+// Register handler
+if (document.getElementById('registerForm')) {
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        const response = await api.register(name, email, password);
-        
-        if (response.token) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('currentUser', JSON.stringify(response.user));
-            window.location.href = 'index.html';
-        } else {
-            alert(response.message || 'Registration failed');
+        if (users.find(u => u.email === email)) {
+            alert('Email already registered');
+            return;
         }
-    } catch (err) {
-        alert('Registration failed. Please try again.');
-    }
-}
 
-// Add event listeners
-if (document.getElementById('loginForm')) {
-    document.getElementById('loginForm').addEventListener('submit', handleLogin);
-}
-if (document.getElementById('registerForm')) {
-    document.getElementById('registerForm').addEventListener('submit', handleRegister);
+        const user = {
+            id: Date.now(),
+            name,
+            email,
+            password // In a real app, this should be hashed
+        };
+
+        users.push(user);
+        localStorage.setItem('users', JSON.stringify(users));
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        window.location.href = 'index.html';
+    });
 } 

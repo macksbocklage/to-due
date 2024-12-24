@@ -1,104 +1,82 @@
-let tasks = [];
-const token = localStorage.getItem('token');
-
-// Check auth
+// Auth functions
 function checkAuth() {
-    if (!token) {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
         window.location.href = 'login.html';
-        return null;
     }
-    return JSON.parse(localStorage.getItem('currentUser'));
+    return currentUser;
 }
 
-// Fetch tasks from API
-async function fetchTasks() {
-    try {
-        tasks = await api.getTasks(token);
-        renderTasks();
-    } catch (err) {
-        console.error('Error fetching tasks:', err);
-        if (err.status === 401) {
-            logout();
-        }
-    }
-}
+// Check auth and get current user
+const currentUser = checkAuth();
 
-// Add task
-async function addTask(event) {
-    event.preventDefault();
-    
-    const task = {
-        title: document.getElementById('taskTitle').value,
-        description: document.getElementById('taskDescription').value,
-        dueDate: document.getElementById('taskDueDate').value,
-        priority: document.getElementById('taskPriority').value,
-        fee: parseFloat(document.getElementById('taskFee').value)
-    };
-
-    try {
-        const newTask = await api.createTask(task, token);
-        tasks.push(newTask);
-        renderTasks();
-        event.target.reset();
-    } catch (err) {
-        console.error('Error adding task:', err);
-        alert('Failed to add task');
-    }
-}
-
-// Delete task
-async function deleteTask(taskId) {
-    try {
-        await api.deleteTask(taskId, token);
-        tasks = tasks.filter(task => task._id !== taskId);
-        renderTasks();
-    } catch (err) {
-        console.error('Error deleting task:', err);
-        alert('Failed to delete task');
-    }
-}
-
-// Toggle task status
-async function toggleTaskStatus(taskId) {
-    try {
-        const task = tasks.find(t => t._id === taskId);
-        if (task) {
-            const updatedTask = await api.updateTask(taskId, {
-                status: task.status === 'pending' ? 'completed' : 'pending'
-            }, token);
-            
-            const taskElement = document.querySelector(`li[data-task-id="${taskId}"]`);
-            if (updatedTask.status === 'completed' && taskElement) {
-                taskElement.classList.add('opacity-0', 'transform', 'translate-y-3');
-                setTimeout(() => {
-                    tasks = tasks.filter(t => t._id !== taskId);
-                    renderTasks();
-                }, 300);
-            }
-        }
-    } catch (err) {
-        console.error('Error updating task:', err);
-        alert('Failed to update task');
-    }
-}
-
-// Logout
+// Add logout function
 function logout() {
-    localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
     window.location.href = 'login.html';
-}
-
-// Initial load
-const currentUser = checkAuth();
-if (currentUser) {
-    document.getElementById('userName').textContent = currentUser.name.toLowerCase();
-    fetchTasks();
 }
 
 // Display user name
 if (currentUser) {
     document.getElementById('userName').textContent = currentUser.name.toLowerCase();
+}
+
+// Task data structure - now with userId
+let tasks = JSON.parse(localStorage.getItem(`tasks_${currentUser.id}`)) || [];
+
+function addTask(event) {
+    event.preventDefault();
+    
+    const dateValue = document.getElementById('taskDueDate').value;
+    // Parse the date directly from the YYYY-MM-DD format
+    const dueDateTime = new Date(dateValue);
+
+    const task = {
+        id: Date.now(),
+        userId: currentUser.id,
+        title: document.getElementById('taskTitle').value,
+        description: document.getElementById('taskDescription').value,
+        dueDate: dueDateTime.toISOString(),
+        priority: document.getElementById('taskPriority').value,
+        fee: parseFloat(document.getElementById('taskFee').value),
+        status: 'pending',
+        createdAt: new Date().toISOString()
+    };
+
+    tasks.push(task);
+    saveTasks();
+    renderTasks();
+    event.target.reset();
+}
+
+function saveTasks() {
+    localStorage.setItem(`tasks_${currentUser.id}`, JSON.stringify(tasks));
+}
+
+function deleteTask(taskId) {
+    tasks = tasks.filter(task => task.id !== taskId);
+    saveTasks();
+    renderTasks();
+}
+
+function toggleTaskStatus(taskId) {
+    const taskElement = document.querySelector(`li[data-task-id="${taskId}"]`);
+    const task = tasks.find(t => t.id === taskId);
+    
+    if (task && taskElement) {
+        if (task.status === 'pending') {
+            task.status = 'completed';
+            // Add fade out animation
+            taskElement.classList.add('opacity-0', 'transform', 'translate-y-3');
+            
+            // Wait for animation to complete before removing
+            setTimeout(() => {
+                tasks = tasks.filter(t => t.id !== taskId);
+                saveTasks();
+                renderTasks();
+            }, 300); // 300ms matches the duration in the CSS transition
+        }
+    }
 }
 
 function getPriorityColor(priority) {
